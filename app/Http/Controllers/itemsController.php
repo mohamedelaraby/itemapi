@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\item;
 use Illuminate\Http\Request;
 
-class itemsContreller extends Controller
+class itemsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response As JSON format
      */
     public function index()
     {
-        //
+
+        // Get all items in the database
+        $items = Item::all();
+
+        // Return Response
+        return response()->json($items);
     }
 
     /**
@@ -45,7 +51,9 @@ class itemsContreller extends Controller
      */
     public function show($id)
     {
-        //
+        // Get one item
+        $item = Item::find($id);
+        return response()->json($item);
     }
 
     /**
