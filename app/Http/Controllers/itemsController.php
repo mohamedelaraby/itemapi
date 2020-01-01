@@ -23,16 +23,6 @@ class itemsController extends Controller
         return response()->json($items);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
 
 
     /**
@@ -79,16 +69,7 @@ class itemsController extends Controller
         return response()->json($item);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -99,7 +80,27 @@ class itemsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Create a validator
+        $validator = Validator::make($request->all(),[
+           'text' => 'required',
+           'body' => 'required',
+        ]);
+
+        // Check for the validator
+        if($validator->fails()){
+            $response = ['response' => $validator->messages, 'success' => false];
+            return $response;
+        } else {
+            // Find an item
+            $item = Item::find($id);
+
+            $item->text = $request->input('text');
+            $item->body = $request->input('body');
+            $item->save();
+
+            // Return response
+            return response()->json($item);
+        }
     }
 
     /**
@@ -110,6 +111,14 @@ class itemsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Find an item
+        $item = Item::find($id);
+
+        // Delete an item
+        $item->delete();
+
+        // Return a response for successful delete
+        $response = ['response' => 'Item deleted', 'success' => true];
+        return $response;
     }
 }
